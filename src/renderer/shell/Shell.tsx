@@ -132,6 +132,15 @@ export function Shell() {
         <Button size="sm" variant="ghost" onClick={() => setPaletteOpen(true)} title="命令面板">
           <Wand2 className="h-3.5 w-3.5" />
         </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => useApp.getState().setLang(useApp.getState().lang === "zh" ? "en" : "zh")}
+          title="语言 / Language"
+          className="text-[11px]"
+        >
+          {useApp.getState().lang === "zh" ? "EN" : "中"}
+        </Button>
         <Button size="sm" variant="ghost" onClick={() => setDark((d) => !d)} title="主题">
           {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
         </Button>

@@ -4,14 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { PapexReference, RefType } from "@latex-core/types";
-import { Plus, Trash2, Quote } from "lucide-react";
+import { Plus, Trash2, Quote, Upload, Download } from "lucide-react";
 
 export function RefsPanel() {
-  const { manifest, setManifest, files, setSectionContent, activeSection } = useApp();
+  const {
+    manifest,
+    setManifest,
+    files,
+    setSectionContent,
+    activeSection,
+    importBib,
+    exportBib,
+    setStatus,
+  } = useApp();
   const [key, setKey] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [author, setAuthor] = React.useState("");
   const [year, setYear] = React.useState("");
+  const fileRef = React.useRef<HTMLInputElement>(null);
 
   const add = () => {
     if (!key.trim()) return;
@@ -32,11 +42,43 @@ export function RefsPanel() {
   return (
     <div className="h-full overflow-auto p-6">
       <div className="mx-auto max-w-3xl space-y-4">
-        <div>
-          <h2 className="font-heading text-2xl font-bold">参考文献</h2>
-          <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            BibTeX 条目 · 在正文用 \cite&#123;key&#125; 引用
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-heading text-2xl font-bold">参考文献</h2>
+            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+              BibTeX 条目 · 在正文用 \cite&#123;key&#125; 引用 · 补全已集成到编辑器
+            </p>
+          </div>
+          <div className="flex gap-1">
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".bib,text/plain"
+              className="hidden"
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                const text = await f.text();
+                const n = importBib(text);
+                setStatus(`已导入 BibTeX：${n} 条`);
+                e.target.value = "";
+              }}
+            />
+            <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>
+              <Upload className="h-3.5 w-3.5" /> 导入 .bib
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                const bib = exportBib();
+                void navigator.clipboard.writeText(bib);
+                setStatus("BibTeX 已复制到剪贴板");
+              }}
+            >
+              <Download className="h-3.5 w-3.5" /> 导出 .bib
+            </Button>
+          </div>
         </div>
 
         <Card>
@@ -100,7 +142,7 @@ export function RefsPanel() {
           ))}
           {!(manifest.references ?? []).length && (
             <div className="rounded-lg border border-dashed border-[hsl(var(--border))] p-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
-              文献库为空。添加第一条参考文献。
+              文献库为空。添加条目或导入 .bib 文件。
             </div>
           )}
         </div>
