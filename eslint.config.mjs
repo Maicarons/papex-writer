@@ -56,6 +56,15 @@ export default [
     },
   },
   {
-    ignores: ["out/**", "dist/**", "node_modules/**", "docs/.vitepress/cache/**", "docs/.vitepress/dist/**"],
+    ignores: [
+      "out/**",
+      "dist/**",
+      "node_modules/**",
+      "docs/.vitepress/cache/**",
+      "docs/.vitepress/dist/**",
+      "scripts/**",
+      ".e2e/**",
+      ".e2e-project/**",
+    ],
   },
 ];

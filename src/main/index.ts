@@ -16,7 +16,7 @@ function createWindow(): void {
     title: "Papex Writer",
     backgroundColor: "#0b1220",
     webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
+      preload: join(__dirname, "../preload/index.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
@@ -33,6 +33,15 @@ function createWindow(): void {
     mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL);
   } else {
     mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+  }
+
+  // CLI/e2e: --project=/abs/path auto-opens after first paint
+  const projArg = process.argv.find((a) => a.startsWith("--project="));
+  const projDir = projArg?.slice("--project=".length) || process.env.PAPEX_E2E_PROJECT;
+  if (projDir && mainWindow) {
+    mainWindow.webContents.once("did-finish-load", () => {
+      mainWindow?.webContents.send("project:autocreate-or-open", projDir);
+    });
   }
 }
 

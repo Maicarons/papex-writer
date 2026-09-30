@@ -30,7 +30,9 @@ export default defineConfig({
         },
         output: {
           format: "cjs",
-          entryFileNames: "[name].js",
+          entryFileNames: "[name].cjs",
+          chunkFileNames: "[name]-[hash].cjs",
+          inlineDynamicImports: true,
         },
       },
     },

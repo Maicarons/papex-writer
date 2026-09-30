@@ -60,3 +60,7 @@ latest.yml
 .playwright-mcp/
 
 .debug-tex/
+
+.e2e/
+.e2e-project/
+.ui-preview.png

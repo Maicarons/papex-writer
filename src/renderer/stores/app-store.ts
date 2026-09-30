@@ -242,8 +242,13 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   createFromTemplate: async (kind) => {
-    // Templates are the same schema; sample adds richer seed content.
+    const before = get().root;
     await get().createProject();
+    const after = get().root;
+    if (!after || after === before) {
+      // dialog cancelled or failed — do not mutate
+      return;
+    }
     if (kind === "sample") {
       const s = get();
       set({
@@ -265,10 +270,11 @@ export const useApp = create<AppState>((set, get) => ({
             "\\section{方法}\n\n\\subsection{双模编辑}\n\n源码是唯一真相，Visual 模式是投影层。\n\n\\begin{itemize}\n  \\item 源码模式：精确控制\n  \\item Visual 模式：快速成文\n\\end{itemize}\n",
         },
         dirty: true,
+        view: "editor",
         status: "已创建示例项目",
       });
     } else {
-      set({ status: kind === "template" ? "已创建模板项目" : "已创建空白项目" });
+      set({ view: "editor", status: kind === "template" ? "已创建模板项目" : "已创建空白项目" });
     }
   },
 

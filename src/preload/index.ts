@@ -21,6 +21,7 @@ export interface WriterApi {
   exportPdf(root: string): Promise<unknown>;
   gitStatus(root: string): Promise<unknown>;
   gitCommit(root: string, message: string): Promise<unknown>;
+  onAutoProject(cb: (dir: string) => void): void;
 }
 
 const api: WriterApi = {
@@ -35,6 +36,10 @@ const api: WriterApi = {
   exportPdf: (root: string) => ipcRenderer.invoke("export:pdf", root),
   gitStatus: (root: string) => ipcRenderer.invoke("git:status", root),
   gitCommit: (root: string, message: string) => ipcRenderer.invoke("git:commit", root, message),
+  onAutoProject: (cb) => {
+    ipcRenderer.on("project:autocreate-or-open", (_e, dir: string) => cb(dir));
+  },
 };
 
 contextBridge.exposeInMainWorld("writer", api);
+
