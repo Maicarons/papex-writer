@@ -31,6 +31,9 @@ export function genMeta(m: PapexManifest): string {
   if (paper.venue) lines.push(`\\papexVenue{${latexEscape(paper.venue)}}`);
   if (paper.doi) lines.push(`\\papexDoi{${latexEscape(paper.doi)}}`);
   if (paper.versionNote) lines.push(`\\papexVersionNote{${latexEscape(paper.versionNote)}}`);
+  if ((paper as { date?: string }).date) {
+    lines.push(`\\papexDate{${latexEscape((paper as { date?: string }).date)}}`);
+  }
 
   const kws = paper.keywords;
   if (Array.isArray(kws) && kws.length) {
