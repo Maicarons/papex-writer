@@ -30,6 +30,9 @@ export default defineConfig({
           items: [
             { text: "快速开始", link: "/guide/getting-started" },
             { text: "创意工作流", link: "/guide/ideation" },
+            { text: "双模编辑（源码 / 所见即所得）", link: "/guide/dual-edit" },
+            { text: "Markdown 转论文片段", link: "/guide/md-convert" },
+            { text: "AI 辅助写作", link: "/guide/ai" },
             { text: "章节与编辑", link: "/guide/editing" },
             { text: "参考文献", link: "/guide/references" },
             { text: "编译与预览", link: "/guide/compile" },
@@ -47,6 +50,7 @@ export default defineConfig({
             { text: "快捷键", link: "/reference/keyboard" },
             { text: "架构说明", link: "/reference/architecture" },
             { text: "命令行", link: "/reference/cli" },
+            { text: "AI 端点与隐私", link: "/reference/ai-privacy" },
           ],
         },
       ],
@@ -70,13 +74,6 @@ export default defineConfig({
       lang: "zh-CN",
       title: "Papex Writer",
       description: "Papex 论文创意与编辑软件",
-      themeConfig: {
-        nav: [
-          { text: "指南", link: "/guide/getting-started" },
-          { text: "参考", link: "/reference/papex-json" },
-          { text: "方案", link: "/guide/project-plan" },
-        ],
-      },
     },
   },
 });

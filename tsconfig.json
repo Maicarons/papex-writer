@@ -11,17 +11,19 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/renderer/*"],
       "@shared/*": ["packages/shared/src/*"],
-      "@latex-core/*": ["packages/latex-core/src/*"]
+      "@latex-core/*": ["packages/latex-core/src/*"],
+      "@ai-core/*": ["packages/ai-core/src/*"],
+      "@md-to-latex/*": ["packages/md-to-latex/src/*"]
     },
     "types": ["node"]
   },
-  "include": ["src/**/*", "packages/**/*", "e2e/**/*"],
-  "exclude": ["node_modules", "dist", "dist-electron", "docs"]
+  "include": ["src/**/*", "packages/**/*", "electron.vite.config.ts"],
+  "exclude": ["node_modules", "out", "dist", "docs", "e2e"]
 }

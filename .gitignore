@@ -55,3 +55,6 @@ docs/.vitepress/dist/
 *.AppImage
 *.blockmap
 latest.yml
+
+# Playwright MCP research artifacts
+.playwright-mcp/
