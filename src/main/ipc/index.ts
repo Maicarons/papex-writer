@@ -5,10 +5,16 @@ import { loadRecents, saveRecent } from "../project/store";
 import { compileProject } from "../tex/compile";
 import { exportArchive, exportPdf } from "../export/export-service";
 import { registerAiIpc } from "../ai/ai-ipc";
+import { gitCommitAll, gitStatus } from "../git/git-service";
 
 export function registerIpc(getWindow: () => BrowserWindow | null): void {
   registerAiIpc();
   ipcMain.handle("app:platform", () => process.platform);
+
+  ipcMain.handle("git:status", (_e, root: string) => gitStatus(root));
+  ipcMain.handle("git:commit", (_e, root: string, message: string) =>
+    gitCommitAll(root, message),
+  );
 
   ipcMain.handle("dialog:chooseDir", async () => {
     const win = getWindow();

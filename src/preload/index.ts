@@ -19,6 +19,8 @@ export interface WriterApi {
     files: { name: string; content: string }[];
   }): Promise<unknown>;
   exportPdf(root: string): Promise<unknown>;
+  gitStatus(root: string): Promise<unknown>;
+  gitCommit(root: string, message: string): Promise<unknown>;
 }
 
 const api: WriterApi = {
@@ -31,6 +33,8 @@ const api: WriterApi = {
   compile: (root: string) => ipcRenderer.invoke("tex:compile", root),
   exportArchive: (payload) => ipcRenderer.invoke("export:archive", payload),
   exportPdf: (root: string) => ipcRenderer.invoke("export:pdf", root),
+  gitStatus: (root: string) => ipcRenderer.invoke("git:status", root),
+  gitCommit: (root: string, message: string) => ipcRenderer.invoke("git:commit", root, message),
 };
 
 contextBridge.exposeInMainWorld("writer", api);

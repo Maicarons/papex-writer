@@ -24,17 +24,20 @@ import { IdeationPanel } from "@/features/ideation/IdeationPanel";
 import { MetaPanel } from "@/features/meta/MetaPanel";
 import { RefsPanel } from "@/features/refs/RefsPanel";
 import { ExportPanel } from "@/features/export/ExportPanel";
+import { EcosystemPanel } from "@/features/ecosystem/EcosystemPanel";
 import { RightDock } from "@/shell/RightDock";
 import { StatusBar } from "@/shell/StatusBar";
 import { CommandPalette } from "@/shell/CommandPalette";
 import { MdPreviewDialog } from "@/features/md-convert/MdPreviewDialog";
+import { Cloud } from "lucide-react";
 
-const NAV: { id: AppView; labelKey: "editor" | "ideation" | "meta" | "refs" | "exportNav"; icon: React.ElementType }[] = [
+const NAV: { id: AppView; labelKey: "editor" | "ideation" | "meta" | "refs" | "exportNav" | "ecosystem"; icon: React.ElementType }[] = [
   { id: "editor", labelKey: "editor", icon: FileText },
   { id: "ideation", labelKey: "ideation", icon: Lightbulb },
   { id: "meta", labelKey: "meta", icon: BookOpen },
   { id: "refs", labelKey: "refs", icon: Table2 },
   { id: "export", labelKey: "exportNav", icon: Download },
+  { id: "ecosystem", labelKey: "ecosystem", icon: Cloud },
 ];
 
 export function Shell() {
@@ -187,6 +190,7 @@ export function Shell() {
           {view === "meta" && <MetaPanel />}
           {view === "refs" && <RefsPanel />}
           {view === "export" && <ExportPanel />}
+          {view === "ecosystem" && <EcosystemPanel />}
         </main>
 
         {/* right dock */}

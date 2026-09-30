@@ -18,7 +18,8 @@ export type AppView =
   | "ideation"
   | "meta"
   | "refs"
-  | "export";
+  | "export"
+  | "ecosystem";
 
 export type Lang = "zh" | "en";
 
@@ -47,7 +48,7 @@ interface AppState {
   dirty: boolean;
   activeSection: string;
   editorMode: "source" | "visual";
-  rightTab: "outline" | "pdf" | "refs" | "ai" | "review";
+  rightTab: "outline" | "pdf" | "refs" | "ai" | "review" | "search" | "git";
   recents: string[];
   lang: Lang;
   revealLine: number | null;
