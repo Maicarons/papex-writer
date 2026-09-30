@@ -58,3 +58,5 @@ latest.yml
 
 # Playwright MCP research artifacts
 .playwright-mcp/
+
+.debug-tex/
