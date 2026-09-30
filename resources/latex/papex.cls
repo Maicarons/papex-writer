@@ -46,6 +46,7 @@
 \RequirePackage{amsmath,amssymb,amsthm} % 数学
 \RequirePackage{enumitem}       % 列表微调
 \RequirePackage{microtype}      % 字距优化（XeLaTeX 下部分功能受限，但安全）
+\RequirePackage{titlesec}       % 章节样式（scheme=plain 下不依赖 \ctexset 章节键）
 
 % 参考文献引擎
 \RequirePackage[backend=biber,style=\papex@bibstyle,sorting=none,
@@ -60,7 +61,7 @@
 \definecolor{papexline}{RGB}{200,205,212}    % 分隔线
 
 % ---------- 页面几何（可被主文档 \geometry{} 覆盖） ----------
-\geometry{margin=2.5cm,headheight=15pt}
+\geometry{margin=2.5cm,headheight=22pt}
 
 % ---------- 元数据存储宏（由构建器注入） ----------
 \newcommand{\papex@paperid}{}
@@ -168,24 +169,16 @@
 \renewcommand{\Affilfont}{\small\itshape\color{papexgrey}}
 \setlength{\affilsep}{0.6em}
 
-% ---------- 章节标题样式 ----------
-\ctexset{
-  section={
-    format={\large\bfseries\sffamily\color{papexblue}},
-    beforeskip={1.4em plus 0.2em minus 0.1em},
-    afterskip={0.8em plus 0.1em},
-  },
-  subsection={
-    format={\normalsize\bfseries\sffamily\color{papexblue}},
-    beforeskip={1.1em plus 0.15em minus 0.1em},
-    afterskip={0.6em plus 0.1em},
-  },
-  subsubsection={
-    format={\normalsize\bfseries\sffamily},
-    beforeskip={1em plus 0.1em},
-    afterskip={0.4em},
-  },
-}
+% ---------- 章节标题样式（titlesec；兼容 ctex scheme=plain） ----------
+\titleformat{\section}
+  {\large\bfseries\sffamily\color{papexblue}}{}{0em}{}[\vspace{-0.2em}]
+\titlespacing*{\section}{0pt}{1.4em plus 0.2em minus 0.1em}{0.8em plus 0.1em}
+\titleformat{\subsection}
+  {\normalsize\bfseries\sffamily\color{papexblue}}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{1.1em plus 0.15em minus 0.1em}{0.6em plus 0.1em}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\sffamily}{}{0em}{}
+\titlespacing*{\subsubsection}{0pt}{1em plus 0.1em}{0.4em}
 
 % ---------- PDF 元数据（begin document 时 title/authors 仍可用） ----------
 \AtBeginDocument{%

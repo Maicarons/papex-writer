@@ -217,7 +217,8 @@ export function buildArchiveFiles(
   files.push({ name: "_papex_appendices.tex", content: genAppendices(m) });
 
   const bib = genBib(m.references);
-  if (bib) files.push({ name: "references.bib", content: bib });
+  // Always ship references.bib so biber/latexmk can resolve the bibliography.
+  files.push({ name: "references.bib", content: bib ?? "% empty bibliography\n" });
 
   files.push({
     name: "papex-template.tex",

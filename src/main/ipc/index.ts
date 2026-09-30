@@ -4,8 +4,10 @@ import { createProject, openProject, saveProject } from "../project/project-serv
 import { loadRecents, saveRecent } from "../project/store";
 import { compileProject } from "../tex/compile";
 import { exportArchive, exportPdf } from "../export/export-service";
+import { registerAiIpc } from "../ai/ai-ipc";
 
 export function registerIpc(getWindow: () => BrowserWindow | null): void {
+  registerAiIpc();
   ipcMain.handle("app:platform", () => process.platform);
 
   ipcMain.handle("dialog:chooseDir", async () => {

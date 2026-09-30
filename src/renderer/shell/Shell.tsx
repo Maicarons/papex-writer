@@ -2,6 +2,7 @@ import * as React from "react";
 import { useApp, type AppView } from "@/stores/app-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { t as tr } from "@/i18n";
 import {
   BookOpen,
   Download,
@@ -9,10 +10,8 @@ import {
   FolderOpen,
   Lightbulb,
   Moon,
-  PanelRight,
   Play,
   Save,
-  Settings,
   Sparkles,
   Sun,
   Table2,
@@ -30,12 +29,12 @@ import { StatusBar } from "@/shell/StatusBar";
 import { CommandPalette } from "@/shell/CommandPalette";
 import { MdPreviewDialog } from "@/features/md-convert/MdPreviewDialog";
 
-const NAV: { id: AppView; label: string; icon: React.ElementType }[] = [
-  { id: "editor", label: "编辑", icon: FileText },
-  { id: "ideation", label: "创意", icon: Lightbulb },
-  { id: "meta", label: "元数据", icon: BookOpen },
-  { id: "refs", label: "文献", icon: Table2 },
-  { id: "export", label: "导出", icon: Download },
+const NAV: { id: AppView; labelKey: "editor" | "ideation" | "meta" | "refs" | "exportNav"; icon: React.ElementType }[] = [
+  { id: "editor", labelKey: "editor", icon: FileText },
+  { id: "ideation", labelKey: "ideation", icon: Lightbulb },
+  { id: "meta", labelKey: "meta", icon: BookOpen },
+  { id: "refs", labelKey: "refs", icon: Table2 },
+  { id: "export", labelKey: "exportNav", icon: Download },
 ];
 
 export function Shell() {
@@ -51,9 +50,12 @@ export function Shell() {
     editorMode,
     setEditorMode,
     activeSection,
+    lang,
+    setLang,
   } = useApp();
   const [dark, setDark] = React.useState(true);
   const [paletteOpen, setPaletteOpen] = React.useState(false);
+  const L = (k: "save" | "compile" | "export" | "source" | "visual" | "app") => tr(lang, k);
 
   React.useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -95,8 +97,8 @@ export function Shell() {
         </div>
         <div className="mx-2 h-5 w-px bg-[hsl(var(--border))]" />
         <div className="min-w-0 flex-1 truncate text-xs text-[hsl(var(--muted-foreground))]">
-          {root ?? "未打开项目"}
-          {dirty ? " · 未保存" : ""}
+          {root ?? (lang === "zh" ? "未打开项目" : "No project")}
+          {dirty ? (lang === "zh" ? " · 未保存" : " · unsaved") : ""}
         </div>
 
         <div className="flex items-center gap-1 rounded-lg bg-[hsl(var(--muted))] p-0.5">
@@ -107,7 +109,7 @@ export function Shell() {
             onClick={() => setEditorMode("source")}
             title="源码模式 (Ctrl+Shift+V)"
           >
-            <Code2 className="h-3.5 w-3.5" /> 源码
+            <Code2 className="h-3.5 w-3.5" /> {L("source")}
           </Button>
           <Button
             size="sm"
@@ -116,18 +118,18 @@ export function Shell() {
             onClick={() => setEditorMode("visual")}
             title="所见即所得 (Ctrl+Shift+V)"
           >
-            <Type className="h-3.5 w-3.5" /> Visual
+            <Type className="h-3.5 w-3.5" /> {L("visual")}
           </Button>
         </div>
 
         <Button size="sm" variant="outline" onClick={() => void saveProject()}>
-          <Save className="h-3.5 w-3.5" /> 保存
+          <Save className="h-3.5 w-3.5" /> {L("save")}
         </Button>
         <Button size="sm" variant="cta" onClick={() => void runCompile()}>
-          <Play className="h-3.5 w-3.5" /> 编译
+          <Play className="h-3.5 w-3.5" /> {L("compile")}
         </Button>
         <Button size="sm" variant="outline" onClick={() => void exportArchive()}>
-          <Download className="h-3.5 w-3.5" /> 导出
+          <Download className="h-3.5 w-3.5" /> {L("export")}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setPaletteOpen(true)} title="命令面板">
           <Wand2 className="h-3.5 w-3.5" />
@@ -135,11 +137,11 @@ export function Shell() {
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => useApp.getState().setLang(useApp.getState().lang === "zh" ? "en" : "zh")}
+          onClick={() => setLang(lang === "zh" ? "en" : "zh")}
           title="语言 / Language"
           className="text-[11px]"
         >
-          {useApp.getState().lang === "zh" ? "EN" : "中"}
+          {lang === "zh" ? "EN" : "中"}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setDark((d) => !d)} title="主题">
           {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
@@ -162,7 +164,7 @@ export function Shell() {
                 )}
               >
                 <item.icon className="h-4 w-4" />
-                {item.label}
+                {tr(lang, item.labelKey)}
               </button>
             ))}
           </nav>
@@ -173,7 +175,7 @@ export function Shell() {
               className="w-full justify-start"
               onClick={() => useApp.getState().setView("welcome")}
             >
-              <FolderOpen className="h-3.5 w-3.5" /> 打开项目
+              <FolderOpen className="h-3.5 w-3.5" /> {tr(lang, "openProject")}
             </Button>
           </div>
         </aside>
@@ -205,5 +207,3 @@ export function AiBadge() {
     </span>
   );
 }
-
-export { Settings, PanelRight };

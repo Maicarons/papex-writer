@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ExportResult, ProjectFileEntry } from "@shared/types";
 import {
@@ -67,7 +67,14 @@ export async function exportArchive(payload: {
 
 function tryTar(dir: string, out: string): Promise<boolean> {
   return new Promise((resolve) => {
-    const args = ["-czf", out, "-C", dir, "."];
+    // Pack submission entries at archive root (papex.json, sections/, …)
+    // matching papex-latex submission.tar.gz layout (no leading ./).
+    const entries = readdirSync(dir).filter((n) => n !== "submission.papex-archive.json");
+    if (!entries.length) {
+      resolve(false);
+      return;
+    }
+    const args = ["-czf", out, "-C", dir, ...entries];
     const child = spawn(process.platform === "win32" ? "tar.exe" : "tar", args, {
       windowsHide: true,
     });

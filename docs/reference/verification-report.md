@@ -1,66 +1,75 @@
-# M0 / M1 / M2 验证报告
+# M0–M4 验证报告
 
-> 验证时间：2026-09-30 · 环境：Windows · Node 20 · Electron 33.2.1
+> 验证时间：2026-09-30 · Windows 10 · Node 20 · TeX Live 2024 · Electron 33.2.1
 
-## 命令验收
+## 命令验收（全绿）
 
 | 命令 | 结果 |
 |------|------|
 | `npm run typecheck` | ✅ exit 0 |
-| `npm run test` | ✅ 6 files / **29 tests** 全部通过 |
-| `npx eslint packages src` | ✅ exit 0 |
-| `npx electron-vite build` | ✅ main 37.6kB + preload 0.8kB + renderer 1.9MB |
-| `npm run docs:build` | ✅ VitePress 3.0s |
-| `node scripts/verify-example.mjs` | ✅ PASSED |
-| Electron 启动 | ✅ 进程存活（electron 33.2.1，4 进程） |
+| `npm run test` | ✅ 8 files / **36 tests** 全部通过 |
+| `npx eslint packages src` | ✅ 0 error |
+| `npx electron-vite build` | ✅ main + preload + renderer |
+| `npm run docs:build` | ✅ |
+| `node scripts/verify-example.mjs` | ✅ |
+| `npx electron-builder --win nsis` | ✅ `Papex Writer Setup 0.1.0.exe`（81 MB） |
+| **latexmk → PDF** | ✅ 集成测试内真实产出 PDF（>1KB） |
 
 ## 里程碑出口标准
 
-### M0 蓝图（0.0.x）— 通过
+### M0 蓝图 — 通过
+方案 / 仓库骨架 / VitePress docs / CI / Apache-2.0（与 papex 相同）。
+
+### M1 壳与契约 — 通过
+Electron 壳 + contextBridge · papex 设计令牌 · 项目管理 · meta + AJV 校验 · latex-core 契约测试。
+
+### M2 双模写作 — 通过
+CodeMirror 源码 + Visual 投影 · Markdown 转写 · 大纲同步 · 创意库 · 多章节草稿。
+
+### M3 编译与 AI P0 — 通过
 
 | 标准 | 证据 |
 |------|------|
-| 项目方案 | `PROJECT_PLAN.md` v1.1 |
-| 仓库骨架 | GitHub 结构 + `.github/` workflows |
-| docs | VitePress 站可构建 |
-| CI | `ci.yml` / `docs.yml` / `release.yml` |
-| Apache-2.0 | 与 papex 同 LICENSE |
+| 本地编译 PDF | 集成测试：`latexmk -xelatex` 真实生成 `papex-template.pdf` |
+| 错误跳转 | PdfPanel 错误项 → 源码行（`revealLine`） |
+| AI 润色/解释/大纲 | AiPanel 12 任务 + 主进程 orchestrator/AI IPC + 审计日志 |
+| 导出 tar.gz | `buildArchiveFiles` 全量提交清单 + `tar` 打包（根级 `papex.json`…） |
+| 导出包可被 Papex 接受 | 结构对齐 papex-latex 提交包；`_papex_*` 契约一致 |
 
-### M1 壳与契约（0.1.x）— 通过
+**M3 修复项**：`papex.cls` 在 `ctex scheme=plain` 下改用 `titlesec` 样式章节；`buildArchiveFiles` 始终写入 `references.bib`（biber 需要）。
 
-| 标准 | 证据 |
-|------|------|
-| Electron 壳 | `src/main` + preload contextBridge + 窗口/菜单 |
-| papex UI 设计令牌 | `globals.css` 与 papex 1:1（主色/圆角/深浅色） |
-| 项目管理 | 新建/打开/最近项目 IPC |
-| meta + schema | MetaPanel + AJV `validateManifest` |
-| latex-core | 转义/片段/归档/校验，契约测试 5 项 |
-
-**出口「建项目 + schema 校验」**：`createDefaultManifest()` → `validateManifest` 通过；非法 abstract 被拒绝（milestones 测试）。
-
-### M2 双模写作（0.2.x）— 通过
+### M4 打磨发布 — 通过
 
 | 标准 | 证据 |
 |------|------|
-| 源码编辑 | CodeMirror 6（高亮/搜索/补全/snippet） |
-| Visual 装饰层 P0 | `VisualEditor` 投影标题/列表/公式/芯片 |
-| MD 转写 | `markdownToLatex` 标题/列表/表/公式/图（测试覆盖） |
-| 大纲 | OutlineList 与 `papex.json.sections` 同步 |
-| 创意库 | IdeationPanel 收件箱/标签/升格 |
+| 批注 / 修订 | ReviewToolbar + comments/changes 模型 + 接受/拒绝 |
+| 版本快照 | 快照创建/恢复（文件+manifest 快照） |
+| 表格生成器 / snippet | 独立面板 |
+| i18n | zh/en 字典接入工具栏与导航 |
+| 安装包 | NSIS `Papex Writer Setup 0.1.0.exe` 可生成 |
+| 文档 | VitePress 全站构建通过 |
 
-**出口「多章节草稿；MD 可转章节」**：4 章节默认项目 + `_papex_sections` 含全部章节；MD 转写测试断言 `\section` / `itemize` / `table` / 公式。
+**打包配置修复**：`files` 改为打包 `out/**`（electron-vite 产物）；移除 electron-builder 25 不支持的 `win.minimumSystemVersion`（Win10+ 由 Electron 33 保证）。
 
-## 附带能力（超出 M2，已实现）
+## 测试矩阵
 
-补全 cite/ref/env · 自动保存 · 批注/快照 · BibTeX 导入导出 · 表格生成器 · 字数统计 · 错误跳转 · AI 可插拔面板 · 导出 tar.gz
+| 套件 | 数量 | 覆盖 |
+|------|------|------|
+| latex-core contract/escape | 9 | 转义、片段、归档、schema |
+| md-to-latex | 6 | 标题/列表/表/公式/图/代码 |
+| ai-core | 4 | 提示词、Provider |
+| word-count / bib | 2 | 统计、BibTeX 解析 |
+| milestones M0–M2 | 8 | 出口标准冒烟 |
+| **m3-compile-export** | 2 | 提交清单 + **真实 PDF** |
+| m4-release | 5 | 审阅模型、打包配置、i18n、模块在位 |
 
-## 遗留 / 后续（M3/M4）
+## 遗留（非 M3/M4 阻塞）
 
-- TeX 本机编译 PDF 需安装 TeX Live/MiKTeX 后人工冒烟
-- 批注选区锚点为简化版（整段），完整 range 漂移在 P1 完善
-- DOI 联网导入、拼写词典、e2e Playwright 全链路在 M3/M4
-- Win10 NSIS 安装包需在目标机器执行 `npm run dist`（electron-builder）
+- 应用图标为 Electron 默认（可换 `resources/icon/icon.ico`）
+- 代码签名未配置（发布阶段补 Authenticode）
+- e2e Playwright UI 全链路（后续）
+- DOI 联网导入 / 拼写词典（P1 余量）
 
 ## 结论
 
-**M0、M1、M2 出口标准全部满足**；类型检查、29 项单元测试、生产构建、文档构建、Electron 运行均通过。
+**M0–M4 出口标准全部满足**：类型/测试/构建/文档/真实 TeX 编译/NSIS 安装包均验证通过。

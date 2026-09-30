@@ -5,10 +5,11 @@ directories:
   output: dist
   buildResources: resources
 files:
-  - dist/**/*
-  - dist-electron/**/*
+  - out/**/*
   - resources/latex/**/*
   - package.json
+  - "!**/*.map"
+  - "!**/node_modules/**/{CHANGELOG.md,README.md,readme.md}"
 asar: true
 asarUnpack:
   - resources/latex/**/*
@@ -19,7 +20,7 @@ win:
     - target: msi
       arch: [x64]
   icon: resources/icon/icon.ico
-  minimumSystemVersion: "10.0.0"
+  # Windows 10+ baseline is enforced by Electron 33 (Chromium); NSIS/MSI x64 only.
 nsis:
   oneClick: false
   perMachine: false
