@@ -1,0 +1,16 @@
+{
+  "name": "@papex-writer/latex-core",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "papex-latex semantics ported to TypeScript: escaping, artifact generation, archive assembly.",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

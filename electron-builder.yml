@@ -1,0 +1,44 @@
+appId: dev.papex.writer
+productName: Papex Writer
+copyright: Copyright 2026 The Papex Authors
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - resources/latex/**/*
+  - package.json
+asar: true
+asarUnpack:
+  - resources/latex/**/*
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: msi
+      arch: [x64]
+  icon: resources/icon/icon.ico
+  minimumSystemVersion: "10.0.0"
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  shortcutName: Papex Writer
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity
+  icon: resources/icon/icon.icns
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Office
+  icon: resources/icon
+publish:
+  provider: github
+  owner: Maicarons
+  repo: papex-writer

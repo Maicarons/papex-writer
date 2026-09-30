@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+dist-electron/
+out/
+release/
+*.tsbuildinfo
+
+# Test
+coverage/
+test-results/
+playwright-report/
+e2e/.artifacts/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# VitePress
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+
+# Papex Writer local project artifacts (if opened in-repo)
+.papex-writer/build/
+.papex-writer/snapshots/
+
+# Electron builder
+*.exe
+*.msi
+*.dmg
+*.AppImage
+*.blockmap
+latest.yml

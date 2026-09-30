@@ -1,0 +1,26 @@
+name: Feature request
+description: 提出功能建议
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题 / 场景
+      description: 你想解决什么？
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      options:
+        - P0 核心
+        - P1 重要
+        - P2 锦上添花

@@ -1,0 +1,32 @@
+name: Bug report
+description: 报告缺陷
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述
+      description: 发生了什么？
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 最小复现路径
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: 操作系统
+      placeholder: Windows 10 22H2 / macOS 14 / Ubuntu 24.04
+  - type: input
+    id: version
+    attributes:
+      label: Papex Writer 版本
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
